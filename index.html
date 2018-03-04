@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="author" content="Vaidehi Garg">
+<title>Vaidehi Garg (vg254)</title>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://d3js.org/topojson.v2.min.js"></script>
+<style>
+  svg { border: solid #ccc 1px; margin: 10px 10px 10px 10px;}
+</style>
+</head>
+<body style="font-family:lato;">
+
+<script>
+
+/* Function to handle any row-by-row processing on CSV */
+var parseRow = function(row) {
+  return row;
+}
+
+/* Variables to store relevant data from CSV */
+var tedData;
+
+var ratings = [];
+var tags = [];
+var durations = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+var ratingsJSON = [];
+var tagsJSON = [];
+var durationsJSON = [];
+
+d3.queue()
+.defer(d3.csv, "ted_data_dirty.csv", parseRow)
+.await(callback)
+
+function callback (error, data) {
+  
+  tedData = data;
+  tedData.forEach(function(d, i) {
+
+    /* extract ratings and count for each rating */
+    var obj1 = JSON.parse(d.ratings);
+    obj1.forEach(function(data, index) {
+      var name = data.name;
+      var count = data.count;
+      var index = ratings.indexOf(name);
+
+      if (index == -1) {
+        ratings.push(name);
+        ratings.push(count);
+      }
+      else {
+        var count_index = index + 1;
+        ratings[count_index] = ratings[count_index] + count;
+      }
+    });
+
+    /* extract tags and count for each tag */
+    var obj2 = JSON.parse(d.tags);
+    obj2.forEach(function(data) {
+      var value = data.toString();
+      var index = tags.indexOf(value);
+
+      if (index == -1) {
+        tags.push(value);
+        tags.push(1);
+      }
+      else {
+        tags[index+1]++;
+      }
+    });
+
+    /* extract durations, form bins by # of minutes*/
+    var minutes = Math.floor(d.duration/100);
+    if (minutes < 5) durations[0]++;
+    else if (minutes < 10) durations[1]++;
+    else if (minutes < 15) durations[2]++;
+    else if (minutes < 20) durations[3]++;
+    else if (minutes < 25) durations[4]++;
+    else if (minutes < 30) durations[5]++;
+    else if (minutes < 35) durations[6]++;
+    else if (minutes < 40) durations[7]++;
+    else if (minutes < 45) durations[8]++;
+    else if (minutes < 50) durations[9]++;
+    else if (minutes < 55) durations[10]++;
+    else if (minutes < 60) durations[11]++;
+    else durations[12]++;
+  });
+
+  /* create ratings JSON */
+  var json = {};
+  ratings.forEach(function(data, index) {
+    if (index % 2 == 0) {
+      json = {
+        "rating": data,
+        "count": ratings[index+1]
+      }
+      ratingsJSON.push(json);
+    }
+  });
+
+  /* create tags JSON */
+  json = {};
+  tags.forEach(function(data, index) {
+    if (index % 2 == 0) {
+      json = {
+        "tag": data,
+        "count": tags[index+1]
+      }
+      tagsJSON.push(json);
+    }
+  });
+
+  /* create durations JSON */
+  json = {};
+  durations.forEach(function(data, index) {
+    var bin = "";
+    if (index == 0) bin = "0-5";
+    else if (index == 1) bin = "5-10";
+    else if (index == 2) bin = "10-15";
+    else if (index == 3) bin = "15-20";
+    else if (index == 4) bin = "20-25";
+    else if (index == 5) bin = "25-30";
+    else if (index == 6) bin = "30-35";
+    else if (index == 7) bin = "35-40";
+    else if (index == 8) bin = "40-45";
+    else if (index == 9) bin = "45-50";
+    else if (index == 10) bin = "50-55";
+    else if (index == 11) bin = "55-60";
+    else if (index == 12) bin = "60+";
+    json = {
+      "bin": bin,
+      "count": durations[index]
+    }
+    durationsJSON.push(json);
+  });
+
+  /* Export JSON objects as files */
+
+  //Get the file contents
+  var ratings_file = new File("ratings.JSON", "write");
+  var tags_file = new File("tags.JSON", "write");
+  var durations_file = new File("durations.JSON", "write");
+
+  var ratings_str = JSON.stringify(ratingsJSON);
+  var tags_str = JSON.stringify(tagsJSON);
+  var durations_str = JSON.stringify(durationsJSON);
+
+  //Save the file contents as a DataURI
+  var ratingsDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(ratings_str);
+  var tagsDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(tags_str);
+  var durationsDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(durations_str);
+
+  //Write it as the href for the link
+  var ratings_link = document.getElementById('ratings_link').href = ratingsDataUri;
+  var tags_link = document.getElementById('tags_link').href = tagsDataUri;
+  var durations_link = document.getElementById('durations_link').href = durations_str;
+  "use strict";
+
+  function exportToJsonFile(jsonData, fileName) {
+    let dataStr = JSON.stringify(jsonData);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    let exportFileDefaultName = fileName + '.json';
+    
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  }
+
+  /* Uncomment the relevant function call to download file */
+  // exportToJsonFile(ratingsJSON, "ratings");
+  // exportToJsonFile(tagsJSON, "tags");
+  // exportToJsonFile(durationsJSON, "durations");
+
+}
+</script>
+
+</body>
+</html>
