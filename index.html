@@ -21,28 +21,53 @@
 
 <!-- END HEADER -->
 
+<!-- VISUALIZATION 1: TAG WORD CLOUD -->
+<p id="tags" align="center">
+</p>
+
 <script>
 
-/* VISUALIZATION 1: TAG WORD CLOUD */
-d3.select("body").append("svg")
-.attr("id", "tags")
-.attr("width", 800)
+d3.select("#tags").append("svg")
+.attr("id", "tagSVG")
+.attr("width", 1200)
 .attr("height", 400);
 
-var svg = d3.select("#tags");
-/* END VISUALIZATION 1 */
+var svg = d3.select("#tagSVG");
 
-/* VISUALIZATION 2: RATINGS BAR GRAPH */
+</script>
+<!-- END VISUALIZATION 1 -->
 
-// add code here
+<!-- VISUALIZATION 2: RANK BAR GRAPH -->
+<p id="ranks" align="center">
+</p>
 
-/* END VISUALIZATION 1 */
+<script>
 
-/* VISUALIZATION 3: DURATION HISTOGRAM */
+d3.select("#ranks").append("svg")
+.attr("id", "rankSVG")
+.attr("width", 1200)
+.attr("height", 400);
 
-// add code here
+var svg = d3.select("#rankSVG");
 
-/* END VISUALIZATION 1 */
+</script>
+<!-- END VISUALIZATION 2 -->
+
+<!-- VISUALIZATION 3: DURATION HISTOGRAM -->
+<p id="durations" align="center">
+</p>
+
+<script>
+
+d3.select("#durations").append("svg")
+.attr("id", "durationSVG")
+.attr("width", 1200)
+.attr("height", 400);
+
+var svg = d3.select("#duration SVG");
+
+</script>
+<!-- END VISUALIZATION 3 -->
 
 </script>
 
