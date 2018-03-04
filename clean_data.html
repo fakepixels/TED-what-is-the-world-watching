@@ -136,27 +136,7 @@ function callback (error, data) {
   });
 
   /* Export JSON objects as files */
-
-  // //Get the file contents
-  // var ratings_file = new File("ratings.JSON", "write");
-  // var tags_file = new File("tags.JSON", "write");
-  // var durations_file = new File("durations.JSON", "write");
-
-  // var ratings_str = JSON.stringify(ratingsJSON);
-  // var tags_str = JSON.stringify(tagsJSON);
-  // var durations_str = JSON.stringify(durationsJSON);
-
-  // //Save the file contents as a DataURI
-  // var ratingsDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(ratings_str);
-  // var tagsDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(tags_str);
-  // var durationsDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(durations_str);
-
-  // //Write it as the href for the link
-  // var ratings_link = document.getElementById('ratings_link').href = ratingsDataUri;
-  // var tags_link = document.getElementById('tags_link').href = tagsDataUri;
-  // var durations_link = document.getElementById('durations_link').href = durations_str;
-  //"use strict";
-
+  "use strict";
   function exportToJsonFile(jsonData, fileName) {
     let dataStr = JSON.stringify(jsonData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
@@ -168,10 +148,11 @@ function callback (error, data) {
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
   }
-
+  
+  /* Uncomment relevant function call to download JSON */
   // exportToJsonFile(ratingsJSON, "ratings");
   // exportToJsonFile(tagsJSON, "tags");
-  exportToJsonFile(durationsJSON, "durations");
+  // exportToJsonFile(durationsJSON, "durations");
 }
 
 </script>
