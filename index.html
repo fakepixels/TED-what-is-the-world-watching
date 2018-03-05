@@ -14,8 +14,10 @@
 <style>
   h1 { font-size: 220px; color: #E62B1E; margin: -10px;}
   h2 { font-size: 20px; font-family: 'Krona One', sans-serif, serif}
-  p { font-family: 'PT Sans', sans-serif; max-width: 35%; align-content: center;}
+  h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'PT Sans', sans-serif;}
+  p { font-family: 'PT Sans', sans-serif; max-width: 35%; align-content: center; line-height: 1.4em}
   .arc text { font: 10px "Krona One", sans-serif; text-anchor: middle;}
+  a { color:#E62B1E;font-weight:800; }
   #title { padding: -20px;}
   #introduction { margin: -20px; padding: 80px; background-color: #F5F5F5;}
   #cloudSection { margin: -20px; padding: 80px; background-color: #E62B1E;}
@@ -31,12 +33,12 @@
 <!-- HEADER -->
 <section id="introduction">
     <div id="header" align="center">
-        <p>INFO 3300: Project 1 <br>Vaidehi Garg (vg254) and Tina He (mh2235)</p>
+        <h3>INFO 3300: Project 1 <br>Vaidehi Garg (vg254) and Tina He (mh2235)</h3>
     </div>  
     <div id="title" align="center" style="font-family: 'Krona One', sans-serif, serif">
-        <img src="ted_logo.png" alt="TED Logo" vspace="20">
+        <img src="ted_logo.png" alt="TED Logo" vspace="20" style="height:60%; width:60%;">
         <h2> What Is The World Watching? </h2>
-        <p> In the last decade, TED talks gave gained traction worldwide. In this project, we use data from TED talks to gain a better sense of what makes them click. The dataset, <a href="https://www.kaggle.com/rounakbanik/ted-data-analysis/data">available here</a>, contains details on 2550 TED talks, from which we intend to extract some key insights.</p>
+        <p> In the last decade, TED talks gave gained traction worldwide. In this project, we use data from TED talks to gain a better sense of what makes them click. <a href="https://www.kaggle.com/rounakbanik/ted-data-analysis/data">The dataset</a> contains details on 2550 TED talks, from which we intend to extract some key insights.</p>
     </div>
 </section>
 <!-- END HEADER -->
@@ -218,7 +220,7 @@ function callback(error, data) {
 
 <!-- VISUALIZATION 3: DURATION HISTOGRAM -->
 <section id="durationSection">
-<div id="durations" align="center"></div>
+<div id="durations" align="center">
 
 <script>
 
@@ -271,7 +273,7 @@ function type(d) {
 
 </script>
     <h2 style="color:#2B2B2B" align="center"> How Long Is Too Long? </h2>
-    <p style="color:#2B2B2B" align="center">Add text here. For some reason I am not able to center this >:(</p>
+    <p style="color:#2B2B2B" align="center">TED is famous for imposing a strict time limit of 18 minutes. Although there is a suggested limit, there have been talks as short as 2 minutes and some have stretched to as long as 24 minutes. We are curious to see how long do most TED talks take.</p>
 </div>
 </section>
 <!-- END VISUALIZATION 3 -->
@@ -280,7 +282,7 @@ function type(d) {
 <div id="ending-bkgd">What's next?</div>
 <div id="ending" align="center">
     <h2>What's next?</h2>
-    <p>In the future, we want to be able to analyze what are the elements that make an effective TED talk. The information can inform us about not just cultural trends, but also public speaking skills.</p>
+    <p>In the future, we want to be able to analyze what are the elements that make an effective TED talk. The information can inform us about not just cultural trends, but also public speaking skills that can benefit learners.</p>
 </div>
 </section>
 
