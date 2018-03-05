@@ -3,26 +3,39 @@
 <head>
 <meta name="authors" content="Vaidehi Garg (vg254) and Tina He (mh2235)">
 <title>INFO 3300: Project 1</title>
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Karma" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Krona+One" rel="stylesheet">
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://d3js.org/topojson.v2.min.js"></script>
 <style>
-  body { font-family: 'lato', Calibri, sans-serif; background-color: rgb(26, 84, 110);}
-  svg { border: solid rgb(237, 228, 29) 1px; margin: 10px 10px 10px 10px;}
+  body {align: center;}
+  svg { border: solid "rgb(237, 228, 29)" 1px; margin: 10px 10px 10px 10px;}
+  h1{font-size:220px; color:#E62B1E; margin: -10px;}
+  p {font-family: 'Karma', serif;max-width: 35%;}
+  #title{padding: -20px;}
+  #introduction{margin: -20px; padding: 60px; background-color: #F2F2F2;}
 </style>
 </head>
+
 <body>
 
 <!-- HEADER -->
-
-<p id="header">
-  <h3 align="center" >INFO 3300: Project 1</h3>
-  <h1 align="center">TED: What Is The World Watching?</h1>
-  <h3 align="center">Vaidehi Garg (vg254) and Tina He (mh2235)</h3>
-</p>
-
+<section id="introduction">
+    <div id="header" align="center" style="font-family: 'Karma', serif";>
+        <p>INFO 3300: Project 1 <br>Vaidehi Garg (vg254) and Tina He (mh2235)</p>
+    </div>  
+    <div id="title" align="center" style="font-family: 'Krona One', sans-serif;', serif">
+        <h1>TED</h1>
+        <h2> What Is The World Watching? </h2>
+        <p>We try to see what TED talks data tell us about what people care about in the 21st century. This dataset has details on 2550 ted talks with which we intend to bring out interesting information and key insights on the TED talks.
+    </p>
+    </div>
+</section>
 <!-- END HEADER -->
 
 <!-- VISUALIZATION 1: TAG WORD CLOUD -->
+<section id="tagSection" align="center">
 <p id="tags" align="center">
 </p>
 
@@ -36,9 +49,11 @@ d3.select("#tags").append("svg")
 var svg = d3.select("#tagSVG");
 
 </script>
+</section>
 <!-- END VISUALIZATION 1 -->
 
 <!-- VISUALIZATION 2: RANK BAR GRAPH -->
+<section id="ratingSection">
 <p id="ratings" align="center">
 </p>
 
@@ -95,9 +110,11 @@ function callback(error, data) {
 }
 
 </script>
+</section>
 <!-- END VISUALIZATION 2 -->
 
 <!-- VISUALIZATION 3: DURATION HISTOGRAM -->
+<section id="durationSection">
 <p id="durations" align="center">
 </p>
 
@@ -111,9 +128,8 @@ d3.select("#durations").append("svg")
 var svg = d3.select("#durationSVG");
 
 </script>
+</section>
 <!-- END VISUALIZATION 3 -->
-
-</script>
 
 </body>
 </html>
