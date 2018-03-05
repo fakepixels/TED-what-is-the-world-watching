@@ -164,6 +164,25 @@ function callback(error, data) {
     .attr("y2", countScale(d.count))
     .style("stroke-width", 28)
     .style("stroke", "red");
+
+    if (d.rating != "Jaw-dropping" ) {
+      ratingSVG.append("svg:image")
+      .attr('x', indexScale(i)-12.5)
+      .attr('y', countScale(d.count)-25)
+      .attr('width', 25)
+      .attr('height', 25)
+      .attr("xlink:href", "emoji/" + d.rating + ".svg");
+    }
+    else {
+      ratingSVG.append("svg:image")
+      .attr('x', indexScale(i)-20)
+      .attr('y', countScale(d.count)-40)
+      .attr('width', 40)
+      .attr('height', 40)
+      .attr("xlink:href", "emoji/" + d.rating + ".svg");
+    }
+
+    
   });
 
   ratingSVG.append("text")
@@ -181,6 +200,7 @@ function callback(error, data) {
       .attr("transform", "rotate (270, 0, 320)")
       .attr("font-size",14)
       .attr("font-family",'Krona One, sans-serif');
+
 }
 
 </script>
