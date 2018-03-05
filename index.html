@@ -6,17 +6,18 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://d3js.org/topojson.v2.min.js"></script>
 <style>
+  body { font-family: 'lato', Calibri, sans-serif; background-color: rgb(26, 84, 110);}
   svg { border: solid rgb(237, 228, 29) 1px; margin: 10px 10px 10px 10px;}
 </style>
 </head>
-<body style="font-family:lato; background-color: rgb(26, 84, 110)">
+<body>
 
 <!-- HEADER -->
 
-<p id="header" style="font-">
-  <h4>INFO 3300: Project 1</h4>
-  <h1>TED: What Is The World Watching?</h4>
-  <h4>Vaidehi Garg (vg254) and Tina He (mh2235)</h4>
+<p id="header">
+  <h3 align="center" >INFO 3300: Project 1</h3>
+  <h1 align="center">TED: What Is The World Watching?</h1>
+  <h3 align="center">Vaidehi Garg (vg254) and Tina He (mh2235)</h3>
 </p>
 
 <!-- END HEADER -->
@@ -38,17 +39,60 @@ var svg = d3.select("#tagSVG");
 <!-- END VISUALIZATION 1 -->
 
 <!-- VISUALIZATION 2: RANK BAR GRAPH -->
-<p id="ranks" align="center">
+<p id="ratings" align="center">
 </p>
 
 <script>
 
-d3.select("#ranks").append("svg")
-.attr("id", "rankSVG")
-.attr("width", 1200)
-.attr("height", 400);
+d3.select("#ratings").append("svg")
+.attr("id", "ratingSVG")
+.attr("width", 900)
+.attr("height", 600);
 
-var svg = d3.select("#rankSVG");
+var ratingSVG = d3.select("#ratingSVG");
+
+var ratingData;
+
+d3.queue()
+.defer(d3.json, "ratings.json")
+.await(callback);
+
+function callback(error, data) {
+  ratingData = data;
+
+  var countScale = d3.scaleLog()
+  // .base(Math.E)
+  .domain([50000,1500000])
+  .range([575,25])
+
+  var indexScale = d3.scaleLinear()
+  .domain([0,14])
+  .range([125,800])
+
+  var countAxis = d3.axisLeft(countScale)
+  .ticks(10);
+
+  var indexAxis = d3.axisBottom(indexScale)
+  .ticks(14);
+
+  ratingSVG.append("g")
+  .call(countAxis)
+  .attr("transform", "translate(100, 0)")
+
+  ratingSVG.append("g")
+  .call(indexAxis)
+  .attr("transform", "translate(0, 575)")
+
+  ratingData.forEach(function (d, i) {
+    ratingSVG.append("line")
+    .attr("x1", indexScale(i+1))
+    .attr("y1", 575)
+    .attr("x2", indexScale(i+1))
+    .attr("y2", countScale(d.count))
+    .style("stroke-width", 2)
+    .style("stroke", "yellow");
+  });
+}
 
 </script>
 <!-- END VISUALIZATION 2 -->
@@ -65,8 +109,6 @@ d3.select("#durations").append("svg")
 .attr("height", 400);
 
 var svg = d3.select("#durationSVG");
-
-
 
 </script>
 <!-- END VISUALIZATION 3 -->
