@@ -49,35 +49,47 @@
 
 <script>
 
+/* Create SVG */
+var width = 1000;
+var height = 400;
+var xpadding = 200;
+var ypadding = 50;
 d3.select("#cloud").append("svg")
 .attr("id", "tagSVG")
-.attr("width", 1000)
-.attr("height", 400);
+.attr("width", width)
+.attr("height", height);
 
-var tagSVG = d3.select("#tagSVG");
-
-var tagData;
-
+/* Import data */
 d3.queue()
 .defer(d3.json, "tags.json")
 .await(callback);
+
+var tagSVG = d3.select("#tagSVG");
+var tagData;
 
 /* Returns random integer between min and max (both inclusive) */
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/* Display data */
 function callback(error, data) {
   tagData = data;
-
+  console.log(tagData.length);
   var count = 0;
 
-  /* X and Y values generated using random number generator function, hard-coded for aesthetic purposes */
-  var x_vals = [333, 370, 615, 296, 250, 735, 760, 590, 200, 230, 535, 750, 505, 314, 622, 605, 667, 180, 500, 405, 425, 382, 490, 450, 580];
+  /* X and Y values generated using random number generator function and then saved for aesthetic purposes */
+  var x_vals = [333, 369, 615, 296, 252, 736, 761, 593, 202, 230, 535, 753, 505, 314, 622, 606, 667, 180, 498, 405, 428, 382, 492, 451, 583];
   var y_vals = [452, 250, 400, 273, 350, 243, 396, 460, 400, 426, 375, 340, 316, 215, 260, 495, 434, 310, 400, 327, 489, 415, 340, 450, 230];
+  // var x_vals = [];
+  // var y_vals = [];
 
   tagData.forEach(function (d, i) {
     var num = d.count;
+    // var x_pos = randInt(200, 1000);
+    // var y_pos = randInt(50, 350);
+    // x_vals.push(x_pos);
+    // y_vals.push(y_pos);
 
     /* We are only considering the top 25 tags, i.e. words with count > 150 */
     if (num > 150) {
@@ -90,9 +102,12 @@ function callback(error, data) {
       .style("opacity", 1-(num/1200))
       .attr("x", x_vals[count])
       .attr("y", y_vals[count]-150);
+      // console.log(d.tag + " " + "x " + x_vals[count] + " y " + y_vals[count]);
       count++;
     }
   });
+  // console.log(x_vals);
+  // console.log(y_vals);
 }
 
 </script>
@@ -108,18 +123,19 @@ function callback(error, data) {
 
 <script>
 
+/* Create SVG */
 d3.select("#ratings").append("svg")
 .attr("id", "ratingSVG")
 .attr("width", 1000)
 .attr("height", 550);
 
-var ratingSVG = d3.select("#ratingSVG");
-
-var ratingData;
-
+/* Import data */
 d3.queue()
 .defer(d3.json, "ratings.json")
 .await(callback);
+
+var ratingSVG = d3.select("#ratingSVG");
+var ratingData;
 
 function callback(error, data) {
   ratingData = data;
@@ -133,26 +149,32 @@ function callback(error, data) {
   .domain([-1,14])
   .range([150,950])
 
+  /* Create and format y-axis */
   var countAxis = d3.axisLeft(countScale)
   .tickFormat(d3.format(",.0f"))
   .ticks(10);
 
-  var reaction_labels = ["Funny", "Beautiful", "Ingenious", "Courageous", 
-  "Longwinded", "Confusing", "Informative", "Fascinating", "Unconvincing", 
-  "Persuasive", "Jaw-dropping", "OK", "Obnoxious", "Inspiring"];
+  /* Create array x-axis labels */
+  var reaction_labels = [];
+  ratingData.forEach(function(d, i) {
+    reaction_labels.push(d.rating);
+  });
 
+  /* Create and format x-axis */
   var indexAxis = d3.axisBottom(indexScale)
   .ticks(14)
   .tickFormat(function(d, i){
     if (i > 0 && i < 15) return reaction_labels[d];
   });
 
+  /* Add and format y-axis */
   ratingSVG.append("g")
   .call(countAxis)
   .attr("transform", "translate(150, 0)")
   .attr("font-size",12)
-  .attr("font-family",'Krona One, sans-serif')
+  .attr("font-family",'Krona One, sans-serif');
 
+  /* Add and format x-axis */
   ratingSVG.append("g")
   .call(indexAxis)
   .attr("transform", "translate(0, 400)")
@@ -164,7 +186,28 @@ function callback(error, data) {
         .attr("dy", ".15em")
         .attr("transform", "rotate(-65)");
 
+  /* Add x-axis label */
+  ratingSVG.append("text")
+      .text("Audience Reaction")
+      .style("text-anchor", "middle")
+      .attr("transform", "translate (500,540)")
+      .attr("font-size",14)
+      .attr("font-family",'Krona One, sans-serif');
+
+  /* Add y-axis label */
+  ratingSVG.append("text")
+      .text("Count")
+      .style("text-anchor", "middle")
+      .attr("x", "3%")
+      .attr("y", "50%")
+      .attr("transform", "rotate (270, 0, 230)")
+      .attr("font-size",14)
+      .attr("font-family",'Krona One, sans-serif');
+
+  /* Iterate through and display data */
   ratingData.forEach(function (d, i) {
+
+    /* Add bar */
     ratingSVG.append("line")
     .attr("x1", indexScale(i))
     .attr("y1", 400)
@@ -173,6 +216,7 @@ function callback(error, data) {
     .style("stroke-width", 28)
     .style("stroke", "red");
 
+    /* Add emoji */
     if (d.rating != "Jaw-dropping" ) {
       ratingSVG.append("svg:image")
       .attr('x', indexScale(i)-12.5)
@@ -191,22 +235,6 @@ function callback(error, data) {
     }
   });
 
-  ratingSVG.append("text")
-      .text("Audience Reaction")
-      .style("text-anchor", "middle")
-      .attr("transform", "translate (500,540)")
-      .attr("font-size",14)
-      .attr("font-family",'Krona One, sans-serif');
-
-  ratingSVG.append("text")
-      .text("Count")
-      .style("text-anchor", "middle")
-      .attr("x", "3%")
-      .attr("y", "50%")
-      .attr("transform", "rotate (270, 0, 230)")
-      .attr("font-size",14)
-      .attr("font-family",'Krona One, sans-serif');
-
 }
 
 </script>
@@ -222,6 +250,8 @@ function callback(error, data) {
 <div id="durations" align="center">
 
 <script>
+
+/* Based on example at https://bl.ocks.org/mbostock/3887193 */
 
 var width = 500,
     height = 500,
@@ -262,6 +292,13 @@ d3.csv("durations.csv", type, function(error, data) {
       .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
       .attr("dy", ".35em")
       .text(function(d) { return d.data.bin; });
+
+  chart.append("text")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("text-anchor", "middle")
+      .text("*data in minutes")
+      .style("font-size", 14);
 
 });
 

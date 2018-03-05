@@ -1,1 +1,14 @@
-[{"rating":"Funny","count":393895},{"rating":"Beautiful","count":490349},{"rating":"Ingenious","count":384386},{"rating":"Courageous","count":420045},{"rating":"Longwinded","count":83344},{"rating":"Confusing","count":53436},{"rating":"Informative","count":887434},{"rating":"Fascinating","count":801119},{"rating":"Unconvincing","count":134558},{"rating":"Persuasive","count":561220},{"rating":"Jaw-dropping","count":377547},{"rating":"OK","count":207157},{"rating":"Obnoxious","count":66303},{"rating":"Inspiring","count":1352048}]
+[{"rating":"Inspiring","count":1352048},
+{"rating":"Informative","count":887434},
+{"rating":"Fascinating","count":801119},
+{"rating":"Persuasive","count":561220},
+{"rating":"Beautiful","count":490349},
+{"rating":"Courageous","count":420045},
+{"rating":"Funny","count":393895},
+{"rating":"Ingenious","count":384386},
+{"rating":"Jaw-dropping","count":377547},
+{"rating":"OK","count":207157},
+{"rating":"Unconvincing","count":134558},
+{"rating":"Longwinded","count":83344},
+{"rating":"Obnoxious","count":66303},
+{"rating":"Confusing","count":53436}]
