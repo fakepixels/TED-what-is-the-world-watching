@@ -75,39 +75,105 @@ function randInt(min, max) {
 /* Display data */
 function callback(error, data) {
   tagData = data;
-  console.log(tagData.length);
   var count = 0;
 
   /* X and Y values generated using random number generator function and then saved for aesthetic purposes */
-  var x_vals = [333, 369, 615, 296, 252, 736, 761, 593, 202, 230, 535, 753, 505, 314, 622, 606, 667, 180, 498, 405, 428, 382, 492, 451, 583];
-  var y_vals = [452, 250, 400, 273, 350, 243, 396, 460, 400, 426, 375, 340, 316, 215, 260, 495, 434, 310, 400, 327, 489, 415, 340, 450, 230];
-  // var x_vals = [];
-  // var y_vals = [];
+  var x_vals = [333, 369, 230, 296, 252, 736, 761, 593, 202, 615, 535, 753, 505, 314, 622, 606, 667, 180, 498, 405, 428, 382, 492, 451, 583];
+  var y_vals = [452, 250, 426, 273, 350, 243, 396, 460, 400, 400, 375, 340, 316, 215, 260, 495, 434, 310, 400, 327, 489, 415, 340, 450, 230];
 
   tagData.forEach(function (d, i) {
-    var num = d.count;
-    // var x_pos = randInt(200, 1000);
-    // var y_pos = randInt(50, 350);
-    // x_vals.push(x_pos);
-    // y_vals.push(y_pos);
+    var num = d.count, NUM_MAX = 727, NUM_MIN = 153;
+    var x_pos;
+    var y_pos;
 
     /* We are only considering the top 25 tags, i.e. words with count > 150 */
     if (num > 150) {
+      x_pos = x_vals[count];
+      y_pos = y_vals[count]-150; //subtract 150 since we resized SVG after generating coordinates
+
       tagSVG.append("text")
       .text(d.tag)
       .style("font-size", num/10)
       .attr("font-family",'Bowlby One SC, cursive')
       .style("fill", "#FFFFFF")
       .style("text-anchor", "middle")
-      .style("opacity", 1-(num/1200))
-      .attr("x", x_vals[count])
-      .attr("y", y_vals[count]-150);
+      // .style("alignment-baseline", "middle")
+      .style("opacity", 1-(num/1200)) //divide by 1200 to obtain a visible yet distinct opacity scale
+      .attr("x", x_pos)
+      .attr("y", y_pos);  
+      // console.log(d.tag + " " + num);
       // console.log(d.tag + " " + "x " + x_vals[count] + " y " + y_vals[count]);
       count++;
     }
+
+    /* Add max value label for "Technology" */
+    if (num == NUM_MAX) {
+      tagSVG.append("text")
+      .text(NUM_MAX + " talks")
+      .style("text-anchor", "left")
+      .style("alignment-baseline", "middle")
+      .style("fill", "#2B2B2B")
+      .style("opacity", 1)
+      .attr("transform", "translate (" + (x_pos+400) + "," + (y_pos-75) + ")")
+      .attr("font-size",14)
+      .attr("font-family",'Krona One, sans-serif');
+
+      tagSVG.append("line")
+      .attr("x1", x_pos+240)
+      .attr("y1", y_pos-25)
+      .attr("x2", x_pos+400)
+      .attr("y2", y_pos-75)
+      .style("stroke", "#2B2B2B")
+      .style("stroke-width", 2)
+      .style("opacity", 1);
+    }
+
+    /* Add min value label for "Education" */
+    if (num == NUM_MIN) {
+      tagSVG.append("text")
+      .text(NUM_MIN + " talks")
+      .style("text-anchor", "right")
+      .style("alignment-baseline", "middle")
+      .style("fill", "#2B2B2B")
+      .style("opacity", 1)
+      .attr("transform", "translate (" + (x_pos-200) + "," + (y_pos+25) + ")")
+      .attr("font-size",14)
+      .attr("font-family",'Krona One, sans-serif');
+
+      tagSVG.append("line")
+      .attr("x1", x_pos-50)
+      .attr("y1", y_pos-5)
+      .attr("x2", x_pos-115)
+      .attr("y2", y_pos+25)
+      .style("stroke", "#2B2B2B")
+      .style("stroke-width", 2)
+      .style("opacity", 1);
+    }
+    
+    /* Add value label for "Global Issues" */
+    if (num == 501) {
+      tagSVG.append("text")
+      .text(501 + " talks")
+      .style("text-anchor", "right")
+      .style("alignment-baseline", "middle")
+      .style("fill", "#2B2B2B")
+      .style("opacity", 1)
+      .attr("transform", "translate (" + (x_pos+375) + "," + (y_pos-15) + ")")
+      .attr("font-size",14)
+      .attr("font-family",'Krona One, sans-serif');
+
+      tagSVG.append("line")
+      .attr("x1", x_pos+200)
+      .attr("y1", y_pos-17)
+      .attr("x2", x_pos+373)
+      .attr("y2", y_pos-17)
+      .style("stroke", "#2B2B2B")
+      .style("stroke-width", 2)
+      .style("opacity", 1);
+    }
+    
   });
-  // console.log(x_vals);
-  // console.log(y_vals);
+
 }
 
 </script>
@@ -140,11 +206,13 @@ var ratingData;
 function callback(error, data) {
   ratingData = data;
 
+  /* Scale for y-axis */
   var countScale = d3.scaleLog()
   .base(10)
   .domain([50000,2000000])
   .range([400,25])
 
+  /* Scale for x-axis */
   var indexScale = d3.scaleLinear()
   .domain([-1,14])
   .range([150,950])
@@ -251,30 +319,36 @@ function callback(error, data) {
 
 <script>
 
-/* Based on example at https://bl.ocks.org/mbostock/3887193 */
+/*  Donut Chart:
+    Based on example at https://bl.ocks.org/mbostock/3887193 */
 
 var width = 500,
     height = 500,
     radius = Math.min(width, height) / 2;
 
+/* Opacity scale for fill color */
 var opacity = d3.scaleLinear()
 .domain([50,1250])
 .range([0.1,0.9]);
 
+/* Define arc */
 var arc = d3.svg.arc()
     .outerRadius(radius - 10)
     .innerRadius(radius - 70);
 
+/* Define pie layout */
 var pie = d3.layout.pie()
     .sort(null)
     .value(function(d) { return d.count; });
 
+/* Create SVG */
 var durationSVG = d3.select("#durations").append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+/* Add data */
 d3.csv("durations.csv", type, function(error, data) {
   if (error) throw error;
 
@@ -283,23 +357,25 @@ d3.csv("durations.csv", type, function(error, data) {
       .enter().append("g")
       .attr("class", "arc");
 
+  /* Add arc for each bin */
   chart.append("path")
       .attr("d", arc)
       .style("fill", "red")
       .style("opacity", function(d) { return opacity(d.data.count); });
 
+  /* Add text for each bin */
   chart.append("text")
       .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
       .attr("dy", ".35em")
       .text(function(d) { return d.data.bin; });
 
+  /* Add text for units */
   chart.append("text")
       .attr("x", 0)
       .attr("y", 0)
       .attr("text-anchor", "middle")
       .text("*data in minutes")
       .style("font-size", 14);
-
 });
 
 function type(d) {
