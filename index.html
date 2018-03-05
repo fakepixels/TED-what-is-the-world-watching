@@ -38,7 +38,7 @@
     <div id="title" align="center" style="font-family: 'Krona One', sans-serif, serif">
         <img src="ted_logo.png" alt="TED Logo" vspace="20" style="height:60%; width:60%;">
         <h2> What Is The World Watching? </h2>
-        <p> In the last decade, TED talks gave gained traction worldwide. In this project, we use data from TED talks to gain a better sense of what makes them click. <a href="https://www.kaggle.com/rounakbanik/ted-data-analysis/data">The dataset</a> contains details on 2550 TED talks, from which we intend to extract some key insights.</p>
+        <p> In the last decade, TED talks have gained traction worldwide. In this project, we use data from TED talks to gain a better sense of what makes them click. <a href="https://www.kaggle.com/rounakbanik/ted-data-analysis/data">The dataset</a> contains details on 2550 TED talks upto September 2017, from which we intend to extract some key insights.</p>
     </div>
 </section>
 <!-- END HEADER -->
@@ -208,7 +208,7 @@ function callback(error, data) {
 
   /* Scale for y-axis */
   var countScale = d3.scaleLog()
-  .base(10)
+  .base(Math.E)
   .domain([50000,2000000])
   .range([400,25])
 
@@ -220,7 +220,8 @@ function callback(error, data) {
   /* Create and format y-axis */
   var countAxis = d3.axisLeft(countScale)
   .tickFormat(d3.format(",.0f"))
-  .ticks(10);
+  .ticks(10)
+  .tickValues([60000,160000,450000,1250000]);
 
   /* Create array x-axis labels */
   var reaction_labels = [];
@@ -264,7 +265,7 @@ function callback(error, data) {
 
   /* Add y-axis label */
   ratingSVG.append("text")
-      .text("Count")
+      .text("Count Amongst All Talks")
       .style("text-anchor", "middle")
       .attr("x", "3%")
       .attr("y", "50%")
@@ -385,7 +386,7 @@ function type(d) {
 
 </script>
     <h2 style="color:#2B2B2B" align="center"> How Long Is Too Long? </h2>
-    <p style="color:#2B2B2B" align="center">TED is famous for imposing a strict time limit of 18 minutes. Although there is a suggested limit, there have been talks as short as 2 minutes and some have stretched to as long as 24 minutes. We are curious to see how long do most TED talks take.</p>
+    <p style="color:#2B2B2B" align="center">TED is famous for imposing a strict time limit of 18 minutes. Although there is a time limit, there have been talks as short as 2 minutes and some have stretched to as long as 52 minutes. We were curious to see how long most TED talks take.</p>
 </div>
 </section>
 <!-- END VISUALIZATION 3 -->
@@ -394,7 +395,8 @@ function type(d) {
 <div id="ending-bkgd">What's next?</div>
 <div id="ending" align="center">
     <h2>What's next?</h2>
-    <p>In the future, we want to be able to analyze what are the elements that make an effective TED talk. The information can inform us about not just cultural trends, but also public speaking skills that can benefit learners.</p>
+    <p>In this project, we have uncovered some interesting surface-level facts about TED talks. The most popular talks target science, technology, and global issues. More people rate TED talks as "inspiring" than any other reaction. A big percentage of TED talks fall in the 5-10 minutes duration.</p>
+    <p>In the future, we want to dig deeper and discover the correlation between tags and reactions. Are TED talks about tech more inspiring than talks about health or education? Which category is the most persuasive. These are questions that require further analysis of the data, and can give us a better view into cultural trends.</p>
 </div>
 </section>
 
