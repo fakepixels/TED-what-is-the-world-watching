@@ -9,12 +9,19 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://d3js.org/topojson.v2.min.js"></script>
 <style>
-  body {align: center;}
-  svg { border: solid "rgb(237, 228, 29)" 1px; margin: 10px 10px 10px 10px;}
-  h1{font-size:220px; color:#E62B1E; margin: -10px;}
-  p {font-family: 'Karma', serif;max-width: 35%;}
-  #title{padding: -20px;}
-  #introduction{margin: -20px; padding: 60px; background-color: #F2F2F2;}
+  /*svg { border: solid "rgb(237, 228, 29)" 1px; margin: 10px 10px 10px 10px;}*/
+  /*h1{ font-size:220px; color:#E62B1E; margin: -10px;}
+  p { font-family: 'Karma', serif; max-width: 35%;}
+  section { align: center; }
+  #title{ padding: -20px; }
+  #introduction{ margin: -20px; padding: 60px; background-color: #F2F2F2; }*/
+  h1 { font-size: 220px; color: #E62B1E; margin: -10px;}
+  p { font-family: 'Karma', serif; max-width: 35%; align-content: center;}
+  #title { padding: -20px;}
+  #introduction { margin: -20px; padding: 60px; background-color: #F2F2F2;}
+  #tagSection { margin: -20px; padding: 60px;}
+  #ratingSection { margin: -20px; padding: 60px; background-color: #ECECEC;}
+  #durationSection { margin: -20px; padding: 60px;}
 </style>
 </head>
 
@@ -25,28 +32,62 @@
     <div id="header" align="center" style="font-family: 'Karma', serif";>
         <p>INFO 3300: Project 1 <br>Vaidehi Garg (vg254) and Tina He (mh2235)</p>
     </div>  
-    <div id="title" align="center" style="font-family: 'Krona One', sans-serif;', serif">
+    <div id="title" align="center" style="font-family: 'Krona One', sans-serif, serif">
         <h1>TED</h1>
         <h2> What Is The World Watching? </h2>
-        <p>We try to see what TED talks data tell us about what people care about in the 21st century. This dataset has details on 2550 ted talks with which we intend to bring out interesting information and key insights on the TED talks.
-    </p>
+        <p>We try to see what TED talks data tell us about what people care about in the 21st century. This dataset has details on 2550 ted talks with which we intend to bring out interesting information and key insights on the TED talks.</p>
     </div>
 </section>
 <!-- END HEADER -->
 
 <!-- VISUALIZATION 1: TAG WORD CLOUD -->
 <section id="tagSection" align="center">
-<p id="tags" align="center">
-</p>
+<div id="tags" align="center"></div>
 
 <script>
 
 d3.select("#tags").append("svg")
 .attr("id", "tagSVG")
-.attr("width", 1200)
+.attr("width", 1000)
 .attr("height", 400);
 
-var svg = d3.select("#tagSVG");
+var tagSVG = d3.select("#tagSVG");
+
+var tagData;
+
+d3.queue()
+.defer(d3.json, "tags.json")
+.await(callback);
+
+/* Returns random integer between min and max (both inclusive) */
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function callback(error, data) {
+  tagData = data;
+
+  var count = 0;
+  var x_vals = [333, 370, 629, 296, 284, 736, 758, 591, 300, 230, 534, 751, 505, 314, 622, 605, 667, 243, 500, 405, 425, 382, 490, 465, 580];
+  var y_vals = [452, 250, 419, 273, 360, 243, 396, 460, 397, 426, 373, 337, 316, 215, 260, 495, 434, 310, 400, 327, 489, 416, 341, 468, 230];
+
+  tagData.forEach(function (d, i) {
+    var num = d.count;
+
+    if (num > 150) {
+      console.log(d.tag + ", x: " + x_vals[count].toString() + ", y: " + y_vals[count].toString());
+      tagSVG.append("text")
+      .attr("x", x_vals[count])
+      .attr("y", y_vals[count]-150)
+      .text(d.tag)
+      .style("font-size", num/10)
+      .style("fill", "red")
+      .style("opacity", 1-(num/1000))
+      .style("text-anchor", "middle");
+      count++;
+    }
+  });
+}
 
 </script>
 </section>
@@ -54,8 +95,7 @@ var svg = d3.select("#tagSVG");
 
 <!-- VISUALIZATION 2: RANK BAR GRAPH -->
 <section id="ratingSection">
-<p id="ratings" align="center">
-</p>
+<div id="ratings" align="center"></div>
 
 <script>
 
@@ -81,7 +121,7 @@ function callback(error, data) {
   .range([575,25])
 
   var indexScale = d3.scaleLinear()
-  .domain([0,14])
+  .domain([0,13])
   .range([125,800])
 
   var countAxis = d3.axisLeft(countScale)
@@ -93,20 +133,38 @@ function callback(error, data) {
   ratingSVG.append("g")
   .call(countAxis)
   .attr("transform", "translate(100, 0)")
+  .attr("font-size",12)
+  .attr("font-family",'Krona One, sans-serif')
 
   ratingSVG.append("g")
   .call(indexAxis)
   .attr("transform", "translate(0, 575)")
+  .attr("font-size",12)
+  .attr("font-family",'Krona One, sans-serif')
 
   ratingData.forEach(function (d, i) {
     ratingSVG.append("line")
-    .attr("x1", indexScale(i+1))
+    .attr("x1", indexScale(i))
     .attr("y1", 575)
-    .attr("x2", indexScale(i+1))
+    .attr("x2", indexScale(i))
     .attr("y2", countScale(d.count))
     .style("stroke-width", 2)
-    .style("stroke", "yellow");
+    .style("stroke", "red");
   });
+
+  ratingSVG.append("text")
+      .attr("transform", "translate (450,630)")
+      .style("text-anchor", "middle")
+      .text("Emotions")
+      .attr("font-size",14)
+      .attr("font-family",'Krona One, sans-serif');
+
+  ratingSVG.append("text")
+      .attr("transform", "translate (35,310)")
+      .style("text-anchor", "middle")
+      .text("Ratings")
+      .attr("font-size",14)
+      .attr("font-family",'Krona One, sans-serif');
 }
 
 </script>
@@ -115,17 +173,59 @@ function callback(error, data) {
 
 <!-- VISUALIZATION 3: DURATION HISTOGRAM -->
 <section id="durationSection">
-<p id="durations" align="center">
-</p>
+<div id="durations" align="center"></div>
 
 <script>
 
 d3.select("#durations").append("svg")
 .attr("id", "durationSVG")
-.attr("width", 1200)
-.attr("height", 400);
+.attr("width", 900)
+.attr("height", 600);
 
-var svg = d3.select("#durationSVG");
+var durationSVG = d3.select("#durationSVG");
+
+var durationData;
+
+d3.queue()
+.defer(d3.json, "durations.json")
+.await(callback);
+
+function callback(error, data) {
+  durationData = data;
+
+  var countScale = d3.scaleLinear()
+  //.base(10)
+  .domain([1,1500])
+  .range([575,25])
+
+  var indexScale = d3.scaleLinear()
+  .domain([0,12])
+  .range([125,800])
+
+  var countAxis = d3.axisLeft(countScale)
+  .ticks(10);
+
+  var indexAxis = d3.axisBottom(indexScale)
+  .ticks(15);
+
+  durationSVG.append("g")
+  .call(countAxis)
+  .attr("transform", "translate(100, 0)")
+
+  durationSVG.append("g")
+  .call(indexAxis)
+  .attr("transform", "translate(0, 575)")
+
+  durationData.forEach(function (d, i) {
+      durationSVG.append("line")
+      .attr("x1", indexScale(i))
+      .attr("y1", 575)
+      .attr("x2", indexScale(i))
+      .attr("y2", countScale(d.count))
+      .style("stroke-width", 2)
+      .style("stroke", "red");
+  });
+}
 
 </script>
 </section>
