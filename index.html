@@ -7,12 +7,15 @@
 <link href="https://fonts.googleapis.com/css?family=Karma" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Krona+One" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
+<script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://d3js.org/topojson.v2.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <style>
   h1 { font-size: 220px; color: #E62B1E; margin: -10px;}
   h2 {font-size: 20px; font-family: 'Krona One', sans-serif, serif}
   p { font-family: 'Karma', serif; max-width: 35%; align-content: center;}
+  .arc text { font: 10px "Krona One", sans-serif; text-anchor: middle;}
   #title { padding: -20px;}
   #introduction { margin: -20px; padding: 80px; background-color: #F5F5F5;}
   #cloudSection { margin: -20px; padding: 80px; background-color: #E62B1E;}
@@ -75,14 +78,15 @@ function callback(error, data) {
     if (num > 150) {
       // console.log(d.tag + ", x: " + x_vals[count].toString() + ", y: " + y_vals[count].toString());
       tagSVG.append("text")
-      .attr("x", x_vals[count])
-      .attr("y", y_vals[count]-150)
       .text(d.tag)
       .style("font-size", num/10)
       .attr("font-family",'Bowlby One SC, cursive')
       .style("fill", "#FFFFFF")
+      .style("text-anchor", "middle")
+      .transition().delay(count*100)
       .style("opacity", 1-(num/1200))
-      .style("text-anchor", "middle");
+      .attr("x", x_vals[count])
+      .attr("y", y_vals[count]-150);
       count++;
     }
   });
@@ -181,8 +185,6 @@ function callback(error, data) {
       .attr('height', 40)
       .attr("xlink:href", "emoji/" + d.rating + ".svg");
     }
-
-    
   });
 
   ratingSVG.append("text")
@@ -216,54 +218,54 @@ function callback(error, data) {
 
 <script>
 
-d3.select("#durations").append("svg")
-.attr("id", "durationSVG")
-.attr("width", 900)
-.attr("height", 600);
+var width = 500,
+    height = 500,
+    radius = Math.min(width, height) / 2;
 
-var durationSVG = d3.select("#durationSVG");
+var opacity = d3.scaleLinear()
+.domain([50,1250])
+.range([0.1,0.9]);
 
-var durationData;
+//ordinal()
+    // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);;
 
-d3.queue()
-.defer(d3.json, "durations.json")
-.await(callback);
+var arc = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(radius - 70);
 
-function callback(error, data) {
-  durationData = data;
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.count; });
 
-  var countScale = d3.scaleLinear()
-  //.base(10)
-  .domain([1,1500])
-  .range([575,25])
+var durationSVG = d3.select("#durations").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-  var indexScale = d3.scaleLinear()
-  .domain([0,12])
-  .range([125,800])
+d3.csv("durations.csv", type, function(error, data) {
+  if (error) throw error;
 
-  var countAxis = d3.axisLeft(countScale)
-  .ticks(10);
+  var chart = durationSVG.selectAll(".arc")
+      .data(pie(data))
+      .enter().append("g")
+      .attr("class", "arc");
 
-  var indexAxis = d3.axisBottom(indexScale)
-  .ticks(15);
+  chart.append("path")
+      .attr("d", arc)
+      .style("fill", "red")
+      .style("opacity", function(d) { return opacity(d.data.count); });
 
-  durationSVG.append("g")
-  .call(countAxis)
-  .attr("transform", "translate(100, 0)")
+  chart.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .text(function(d) { return d.data.bin; });
 
-  durationSVG.append("g")
-  .call(indexAxis)
-  .attr("transform", "translate(0, 575)")
+});
 
-  durationData.forEach(function (d, i) {
-      durationSVG.append("line")
-      .attr("x1", indexScale(i))
-      .attr("y1", 575)
-      .attr("x2", indexScale(i))
-      .attr("y2", countScale(d.count))
-      .style("stroke-width", 2)
-      .style("stroke", "#E62B1E");
-  });
+function type(d) {
+  d.count = +d.count;
+  return d;
 }
 
 </script>
