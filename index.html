@@ -13,7 +13,7 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <style>
   h1 { font-size: 220px; color: #E62B1E; margin: -10px;}
-  h2 {font-size: 20px; font-family: 'Krona One', sans-serif, serif}
+  h2 { font-size: 20px; font-family: 'Krona One', sans-serif, serif}
   p { font-family: 'PT Sans', sans-serif; max-width: 35%; align-content: center;}
   .arc text { font: 10px "Krona One", sans-serif; text-anchor: middle;}
   #title { padding: -20px;}
@@ -22,7 +22,7 @@
   #ratingSection { margin: -20px; padding: 80px; background-color: #ECECEC;}
   #durationSection { margin: -20px; padding: 80px; background-color: #F3F3F3;}
   #end { margin: -20px; padding: 250px; position: relative;}
-  #ending-bkgd { font-family: 'Krona One', sans-serif; font-size: 110px; opacity: 0.05; position: absolute; top: 15; left: 0;bottom: 30; right: 0; z-index: -20; overflow: hidden;}
+  #ending-bkgd { font-family: 'Krona One', sans-serif; font-size: 110px; opacity: 0.05; position: absolute; top: 15; left: 0; bottom: 30; right: 0; z-index: -20; overflow: hidden;}
 </style>
 </head>
 
@@ -30,14 +30,13 @@
 
 <!-- HEADER -->
 <section id="introduction">
-    <div id="header" align="center" style="font-family: 'Karma', serif";>
+    <div id="header" align="center">
         <p>INFO 3300: Project 1 <br>Vaidehi Garg (vg254) and Tina He (mh2235)</p>
     </div>  
     <div id="title" align="center" style="font-family: 'Krona One', sans-serif, serif">
-        <!-- <h1>TED</h1> -->
         <img src="ted_logo.png" alt="TED Logo" vspace="20">
         <h2> What Is The World Watching? </h2>
-        <p>We try to see what TED talks data tell us about what people care about in the 21st century. This dataset has details on 2550 ted talks with which we intend to bring out interesting information and key insights on the TED talks.</p>
+        <p> In the last decade, TED talks gave gained traction worldwide. In this project, we use data from TED talks to gain a better sense of what makes them click. The dataset, <a href="https://www.kaggle.com/rounakbanik/ted-data-analysis/data">available here</a>, contains details on 2550 TED talks, from which we intend to extract some key insights.</p>
     </div>
 </section>
 <!-- END HEADER -->
@@ -70,14 +69,16 @@ function callback(error, data) {
   tagData = data;
 
   var count = 0;
+
+  /* X and Y values generated using random number generator function, hard-coded for aesthetic purposes */
   var x_vals = [333, 370, 615, 296, 250, 735, 760, 590, 200, 230, 535, 750, 505, 314, 622, 605, 667, 180, 500, 405, 425, 382, 490, 450, 580];
   var y_vals = [452, 250, 400, 273, 350, 243, 396, 460, 400, 426, 375, 340, 316, 215, 260, 495, 434, 310, 400, 327, 489, 415, 340, 450, 230];
 
   tagData.forEach(function (d, i) {
     var num = d.count;
 
+    /* We are only considering the top 25 tags, i.e. words with count > 150 */
     if (num > 150) {
-      // console.log(d.tag + ", x: " + x_vals[count].toString() + ", y: " + y_vals[count].toString());
       tagSVG.append("text")
       .text(d.tag)
       .style("font-size", num/10)
@@ -94,13 +95,13 @@ function callback(error, data) {
 }
 
 </script>
-    <h2 style="color:white"> Most Frenquently Mentioned Words </h2>
-    <p style="color:white">We are curious about which words are most often used by TED Speakers. Could we create a Word Cloud out of all TED Speeches? Luckily, d3 has a very powerful word cloud generating library that allows us to do that.</p>
+    <h2 style="color:white"> What Are TED Talks About? </h2>
+    <p style="color:white"> We were curious about the topics that are popularly addressed in TED talks. Here, we have created a word cloud of the 25 most popular tags amongst TED talks. Each of the tags above has at least 150 talks associated with it!</p>
 </div>
 </section>
 <!-- END VISUALIZATION 1 -->
 
-<!-- VISUALIZATION 2: RANK BAR GRAPH -->
+<!-- VISUALIZATION 2: RATINGS BAR GRAPH -->
 <section id="ratingSection">
 <div id="ratings" align="center">
 
@@ -109,7 +110,7 @@ function callback(error, data) {
 d3.select("#ratings").append("svg")
 .attr("id", "ratingSVG")
 .attr("width", 1000)
-.attr("height", 750);
+.attr("height", 550);
 
 var ratingSVG = d3.select("#ratingSVG");
 
@@ -125,7 +126,7 @@ function callback(error, data) {
   var countScale = d3.scaleLog()
   .base(10)
   .domain([50000,2000000])
-  .range([575,25])
+  .range([400,25])
 
   var indexScale = d3.scaleLinear()
   .domain([-1,14])
@@ -138,6 +139,7 @@ function callback(error, data) {
   var reaction_labels = ["Funny", "Beautiful", "Ingenious", "Courageous", 
   "Longwinded", "Confusing", "Informative", "Fascinating", "Unconvincing", 
   "Persuasive", "Jaw-dropping", "OK", "Obnoxious", "Inspiring"];
+
   var indexAxis = d3.axisBottom(indexScale)
   .ticks(14)
   .tickFormat(function(d, i){
@@ -152,7 +154,7 @@ function callback(error, data) {
 
   ratingSVG.append("g")
   .call(indexAxis)
-  .attr("transform", "translate(0, 575)")
+  .attr("transform", "translate(0, 400)")
   .attr("font-size",12)
   .attr("font-family",'Krona One, sans-serif')
   .selectAll("text")  
@@ -164,7 +166,7 @@ function callback(error, data) {
   ratingData.forEach(function (d, i) {
     ratingSVG.append("line")
     .attr("x1", indexScale(i))
-    .attr("y1", 575)
+    .attr("y1", 400)
     .attr("x2", indexScale(i))
     .attr("y2", countScale(d.count))
     .style("stroke-width", 28)
@@ -191,7 +193,7 @@ function callback(error, data) {
   ratingSVG.append("text")
       .text("Audience Reaction")
       .style("text-anchor", "middle")
-      .attr("transform", "translate (525,725)")
+      .attr("transform", "translate (500,540)")
       .attr("font-size",14)
       .attr("font-family",'Krona One, sans-serif');
 
@@ -200,15 +202,16 @@ function callback(error, data) {
       .style("text-anchor", "middle")
       .attr("x", "3%")
       .attr("y", "50%")
-      .attr("transform", "rotate (270, 0, 320)")
+      .attr("transform", "rotate (270, 0, 230)")
       .attr("font-size",14)
       .attr("font-family",'Krona One, sans-serif');
 
 }
 
 </script>
-    <h2 style="color:#2B2B2B"> What kinds of emotions do they evoke? </h2>
-    <p style="color:#2B2B2B">We are curious to see what kind of emotions these talks evoke. We are more curious to learn what are the most common responses to these talks.</p>
+    <h2 style="color:#2B2B2B"> What Reactions Do They Evoke? </h2>
+    <p style="color:#2B2B2B"> How do people respond to TED talks?</p>
+    <p style="color:#2B2B2B">TED allows online viewers to "rate" the talks based on the reaction they evoke in them. Some of the most popular responses to TED talks are: "Inspiring", "Informative", "Fascinating", and "Persuasive".</p>
 </div>
 </section>
 <!-- END VISUALIZATION 2 -->
@@ -267,6 +270,9 @@ function type(d) {
 }
 
 </script>
+    <h2 style="color:#2B2B2B" align="center"> What kinds of emotions do they evoke? </h2>
+    <p style="color:#2B2B2B" align="center">We are curious to see what kind of emotions these talks evoke. We are more curious to learn what are the most common responses to these talks.</p>
+</div>
 </section>
 <!-- END VISUALIZATION 3 -->
 
