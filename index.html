@@ -6,22 +6,20 @@
 <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Karma" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Krona+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://d3js.org/topojson.v2.min.js"></script>
 <style>
-  /*svg { border: solid "rgb(237, 228, 29)" 1px; margin: 10px 10px 10px 10px;}*/
-  /*h1{ font-size:220px; color:#E62B1E; margin: -10px;}
-  p { font-family: 'Karma', serif; max-width: 35%;}
-  section { align: center; }
-  #title{ padding: -20px; }
-  #introduction{ margin: -20px; padding: 60px; background-color: #F2F2F2; }*/
   h1 { font-size: 220px; color: #E62B1E; margin: -10px;}
+  h2 {font-size: 20px; font-family: 'Krona One', sans-serif, serif}
   p { font-family: 'Karma', serif; max-width: 35%; align-content: center;}
   #title { padding: -20px;}
-  #introduction { margin: -20px; padding: 60px; background-color: #F2F2F2;}
-  #tagSection { margin: -20px; padding: 60px;}
-  #ratingSection { margin: -20px; padding: 60px; background-color: #ECECEC;}
-  #durationSection { margin: -20px; padding: 60px;}
+  #introduction { margin: -20px; padding: 80px; background-color: #F5F5F5;}
+  #cloudSection { margin: -20px; padding: 80px; background-color: #E62B1E;}
+  #ratingSection { margin: -20px; padding: 80px; background-color: #ECECEC;}
+  #durationSection { margin: -20px; padding: 80px; background-color: #F3F3F3;}
+  #end { margin: -20px; padding: 250px; position: relative;}
+  #ending-bkgd { font-family: 'Krona One', sans-serif; font-size: 110px; opacity: 0.05; position: absolute; top: 15; left: 0;bottom: 30; right: 0; z-index: -20; overflow: hidden;}
 </style>
 </head>
 
@@ -41,12 +39,12 @@
 <!-- END HEADER -->
 
 <!-- VISUALIZATION 1: TAG WORD CLOUD -->
-<section id="tagSection" align="center">
-<div id="tags" align="center"></div>
+<section id="cloudSection" align="center">
+<div id="cloud" align="center">
 
 <script>
 
-d3.select("#tags").append("svg")
+d3.select("#cloud").append("svg")
 .attr("id", "tagSVG")
 .attr("width", 1000)
 .attr("height", 400);
@@ -68,21 +66,22 @@ function callback(error, data) {
   tagData = data;
 
   var count = 0;
-  var x_vals = [333, 370, 629, 296, 284, 736, 758, 591, 300, 230, 534, 751, 505, 314, 622, 605, 667, 243, 500, 405, 425, 382, 490, 465, 580];
-  var y_vals = [452, 250, 419, 273, 360, 243, 396, 460, 397, 426, 373, 337, 316, 215, 260, 495, 434, 310, 400, 327, 489, 416, 341, 468, 230];
+  var x_vals = [333, 370, 615, 296, 250, 735, 760, 590, 200, 230, 535, 750, 505, 314, 622, 605, 667, 180, 500, 405, 425, 382, 490, 450, 580];
+  var y_vals = [452, 250, 400, 273, 350, 243, 396, 460, 400, 426, 375, 340, 316, 215, 260, 495, 434, 310, 400, 327, 489, 415, 340, 450, 230];
 
   tagData.forEach(function (d, i) {
     var num = d.count;
 
     if (num > 150) {
-      console.log(d.tag + ", x: " + x_vals[count].toString() + ", y: " + y_vals[count].toString());
+      // console.log(d.tag + ", x: " + x_vals[count].toString() + ", y: " + y_vals[count].toString());
       tagSVG.append("text")
       .attr("x", x_vals[count])
       .attr("y", y_vals[count]-150)
       .text(d.tag)
       .style("font-size", num/10)
-      .style("fill", "red")
-      .style("opacity", 1-(num/1000))
+      .attr("font-family",'Bowlby One SC, cursive')
+      .style("fill", "#FFFFFF")
+      .style("opacity", 1-(num/1200))
       .style("text-anchor", "middle");
       count++;
     }
@@ -90,19 +89,22 @@ function callback(error, data) {
 }
 
 </script>
+    <h2 style="color:white"> Most Frenquently Mentioned Words </h2>
+    <p style="color:white">We are curious about which words are most often used by TED Speakers. Could we create a Word Cloud out of all TED Speeches? Luckily, d3 has a very powerful word cloud generating library that allows us to do that.</p>
+</div>
 </section>
 <!-- END VISUALIZATION 1 -->
 
 <!-- VISUALIZATION 2: RANK BAR GRAPH -->
 <section id="ratingSection">
-<div id="ratings" align="center"></div>
+<div id="ratings" align="center">
 
 <script>
 
 d3.select("#ratings").append("svg")
 .attr("id", "ratingSVG")
-.attr("width", 900)
-.attr("height", 600);
+.attr("width", 1000)
+.attr("height", 750);
 
 var ratingSVG = d3.select("#ratingSVG");
 
@@ -116,23 +118,30 @@ function callback(error, data) {
   ratingData = data;
 
   var countScale = d3.scaleLog()
-  // .base(Math.E)
-  .domain([50000,1500000])
+  .base(10)
+  .domain([50000,2000000])
   .range([575,25])
 
   var indexScale = d3.scaleLinear()
-  .domain([0,13])
-  .range([125,800])
+  .domain([-1,14])
+  .range([150,950])
 
   var countAxis = d3.axisLeft(countScale)
+  .tickFormat(d3.format(",.0f"))
   .ticks(10);
 
+  var reaction_labels = ["Funny", "Beautiful", "Ingenious", "Courageous", 
+  "Longwinded", "Confusing", "Informative", "Fascinating", "Unconvincing", 
+  "Persuasive", "Jaw-dropping", "OK", "Obnoxious", "Inspiring"];
   var indexAxis = d3.axisBottom(indexScale)
-  .ticks(14);
+  .ticks(14)
+  .tickFormat(function(d, i){
+    if (i > 0 && i < 15) return reaction_labels[d];
+  });
 
   ratingSVG.append("g")
   .call(countAxis)
-  .attr("transform", "translate(100, 0)")
+  .attr("transform", "translate(150, 0)")
   .attr("font-size",12)
   .attr("font-family",'Krona One, sans-serif')
 
@@ -141,6 +150,11 @@ function callback(error, data) {
   .attr("transform", "translate(0, 575)")
   .attr("font-size",12)
   .attr("font-family",'Krona One, sans-serif')
+  .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
 
   ratingData.forEach(function (d, i) {
     ratingSVG.append("line")
@@ -148,26 +162,31 @@ function callback(error, data) {
     .attr("y1", 575)
     .attr("x2", indexScale(i))
     .attr("y2", countScale(d.count))
-    .style("stroke-width", 2)
+    .style("stroke-width", 28)
     .style("stroke", "red");
   });
 
   ratingSVG.append("text")
-      .attr("transform", "translate (450,630)")
+      .text("Audience Reaction")
       .style("text-anchor", "middle")
-      .text("Emotions")
+      .attr("transform", "translate (525,725)")
       .attr("font-size",14)
       .attr("font-family",'Krona One, sans-serif');
 
   ratingSVG.append("text")
-      .attr("transform", "translate (35,310)")
+      .text("Count")
       .style("text-anchor", "middle")
-      .text("Ratings")
+      .attr("x", "3%")
+      .attr("y", "50%")
+      .attr("transform", "rotate (270, 0, 320)")
       .attr("font-size",14)
       .attr("font-family",'Krona One, sans-serif');
 }
 
 </script>
+    <h2 style="color:#2B2B2B"> What kinds of emotions do they evoke? </h2>
+    <p style="color:#2B2B2B">We are curious to see what kind of emotions these talks evoke. We are more curious to learn what are the most common responses to these talks.</p>
+</div>
 </section>
 <!-- END VISUALIZATION 2 -->
 
@@ -223,13 +242,21 @@ function callback(error, data) {
       .attr("x2", indexScale(i))
       .attr("y2", countScale(d.count))
       .style("stroke-width", 2)
-      .style("stroke", "red");
+      .style("stroke", "#E62B1E");
   });
 }
 
 </script>
 </section>
 <!-- END VISUALIZATION 3 -->
+
+<section id="end" align="center">
+<div id="ending-bkgd">What's next?</div>
+<div id="ending" align="center">
+    <h2>What's next?</h2>
+    <p>In the future, we want to be able to analyze what are the elements that make an effective TED talk. The information can inform us about not just cultural trends, but also public speaking skills.</p>
+</div>
+</section>
 
 </body>
 </html>
