@@ -329,8 +329,8 @@ var width = 500,
 
 /* Opacity scale for fill color */
 var opacity = d3.scaleLinear()
-.domain([50,1250])
-.range([0.1,0.9]);
+.domain([0,75])
+.range([0.10,1]);
 
 /* Define arc */
 var arc = d3.svg.arc()
@@ -350,7 +350,7 @@ var durationSVG = d3.select("#durations").append("svg")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 /* Add data */
-d3.csv("durations.csv", type, function(error, data) {
+d3.csv("durations2.csv", type, function(error, data) {
   if (error) throw error;
 
   var chart = durationSVG.selectAll(".arc")
@@ -364,19 +364,37 @@ d3.csv("durations.csv", type, function(error, data) {
       .style("fill", "red")
       .style("opacity", function(d) { return opacity(d.data.count); });
 
-  /* Add text for each bin */
-  chart.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .text(function(d) { return d.data.bin; });
-
   /* Add text for units */
   chart.append("text")
       .attr("x", 0)
       .attr("y", 0)
       .attr("text-anchor", "middle")
-      .text("*data in minutes")
-      .style("font-size", 14);
+      .text("What duration (in minutes)")
+      .style("font-size", 14)
+      .style("fill", "#2B2B2B");
+
+  /* Add text for units */
+  chart.append("text")
+      .attr("x", 0)
+      .attr("y", 20)
+      .attr("text-anchor", "middle")
+      .text("gets the most views (in %)?")
+      .style("font-size", 14)
+      .style("fill", "#2B2B2B");
+
+  /* Add text for each bin */
+  chart.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .text(function(d) { return d.data.bin; })
+      .style("fill", "#2B2B2B");
+
+  /* Add % viewcount to each bin */
+  chart.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", "1.75em")
+      .text(function(d) { return Math.round(d.data.count)+"%"; })
+      .style("fill", "#2B2B2B");
 });
 
 function type(d) {
@@ -386,7 +404,7 @@ function type(d) {
 
 </script>
     <h2 style="color:#2B2B2B" align="center"> How Long Is Too Long? </h2>
-    <p style="color:#2B2B2B" align="center">TED is famous for imposing a strict time limit of 18 minutes. Although there is a time limit, there have been talks as short as 2 minutes and some have stretched to as long as 52 minutes. We were curious to see how long most TED talks take.</p>
+    <p style="color:#2B2B2B" align="center">TED is famous for imposing a strict time limit of 18 minutes. Although there is a time limit, there have been talks as short as 2 minutes and some have stretched to as long as 52 minutes. We were curious to what duration of TED talks garner the most views.</p>
 </div>
 </section>
 <!-- END VISUALIZATION 3 -->
@@ -395,7 +413,7 @@ function type(d) {
 <div id="ending-bkgd">What's next?</div>
 <div id="ending" align="center">
     <h2>What's next?</h2>
-    <p>In this project, we have uncovered some interesting surface-level facts about TED talks. The most popular talks target science, technology, and global issues. More people rate TED talks as "inspiring" than any other reaction. A big percentage of TED talks fall in the 5-10 minutes duration.</p>
+    <p>In this project, we have uncovered some interesting surface-level facts about TED talks. The most popular talks target science, technology, and global issues. More people rate TED talks as "inspiring" than any other reaction. A big percentage of TED talks fall in the 5-10 minutes duration, and garner more views than longer talks.</p>
     <p>In the future, we want to dig deeper and discover the correlation between tags and reactions. Are TED talks about tech more inspiring than talks about health or education? Which category is the most persuasive. These are questions that require further analysis of the data, and can give us a better view into cultural trends.</p>
 </div>
 </section>

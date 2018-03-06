@@ -24,10 +24,14 @@ var tedData;
 var ratings = [];
 var tags = [];
 var durations = [0, 0, 0, 0];
+var durations2 = [0, 0, 0, 0];
 
 var ratingsJSON = [];
 var tagsJSON = [];
 var durationsCSV = "bin,count\n"
+var durationsCSV2 = "bin,count\n"
+
+var totalViews = 0;
 
 d3.queue()
 .defer(d3.csv, "ted_data_dirty.csv", parseRow)
@@ -70,13 +74,25 @@ function callback (error, data) {
       }
     });
 
-    /* extract durations, form bins by # of minutes*/
+    /* extract durations with count, form bins by # of minutes*/
     var minutes = Math.floor(d.duration/100);
     if (minutes < 5) durations[0]++;
     else if (minutes < 10) durations[1]++;
     else if (minutes < 15) durations[2]++;
     else durations[3]++;
+
+    /* extract durations with viewcount, form bins by # of minutes*/
+    var minutes = Math.floor(d.duration/100);
+    if (minutes < 5) durations2[0] += Number(d.views);
+    else if (minutes < 10) durations2[1] += Number(d.views);
+    else if (minutes < 15) durations2[2] += Number(d.views);
+    else durations2[3] += Number(d.views);
+
+    /* extract total number of views */
+    totalViews += Number(d.views);
   });
+
+  
 
   /* create ratings JSON */
   var json = {};
@@ -108,13 +124,21 @@ function callback (error, data) {
     if (index == 0) bin = "<5,";
     else if (index == 1) bin = "5-10,";
     else if (index == 2) bin = "10-15,";
-    else if (index == 3) bin = "15+,";
-    // json = {
-    //   "bin": bin,
-    //   "count": durations[index]
-    // }
+    else if (index == 3) bin = ">15,";
     var csv = bin + durations[index] + "\n";
     durationsCSV = durationsCSV + csv;
+  });
+
+  /* create durations CSV with view count*/
+  durations2.forEach(function(data, index) {
+    var bin = "";
+    if (index == 0) bin = "<5,";
+    else if (index == 1) bin = "5-10,";
+    else if (index == 2) bin = "10-15,";
+    else if (index == 3) bin = ">15,";
+    var viewPercentage = durations2[index]*100/totalViews;
+    var csv = bin + viewPercentage + "\n";
+    durationsCSV2 = durationsCSV2 + csv;
   });
 
   /* Function to sort JSON by value, from https://stackoverflow.com/questions/881510/sorting-json-by-values */
@@ -144,7 +168,7 @@ function callback (error, data) {
   }
 
   function exportToCsvFile(csvData, fileName) {
-    let dataStr = durationsCSV;//JSON.stringify(jsonData);
+    let dataStr = csvData;//JSON.stringify(jsonData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
     
     let exportFileDefaultName = fileName + '.csv';
@@ -159,6 +183,7 @@ function callback (error, data) {
   // exportToJsonFile(sortResults(ratingsJSON, 'count', false), "ratings");
   // exportToJsonFile(tagsJSON, "tags");
   // exportToCsvFile(durationsCSV, "durations");
+  exportToCsvFile(durationsCSV2, "durations2");
 }
 
 </script>
