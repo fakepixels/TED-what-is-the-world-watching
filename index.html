@@ -353,7 +353,7 @@ var durationSVG = d3.select("#durations").append("svg")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 /* Add data */
-d3.csv("durations2.csv", type, function(error, data) {
+d3.csv("durations.csv", type, function(error, data) {
   if (error) throw error;
 
   var chart = durationSVG.selectAll(".arc")
@@ -372,7 +372,7 @@ d3.csv("durations2.csv", type, function(error, data) {
       .attr("x", 0)
       .attr("y", 0)
       .attr("text-anchor", "middle")
-      .text("What duration (in minutes)")
+      .text("What duration (minutes)")
       .style("font-size", 14)
       .style("fill", "#2B2B2B");
 
@@ -381,7 +381,7 @@ d3.csv("durations2.csv", type, function(error, data) {
       .attr("x", 0)
       .attr("y", 20)
       .attr("text-anchor", "middle")
-      .text("gets the most views (in %)?")
+      .text("gets the most views (%)?")
       .style("font-size", 14)
       .style("fill", "#2B2B2B");
 
