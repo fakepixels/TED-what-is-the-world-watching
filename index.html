@@ -261,7 +261,8 @@ function callback(error, data) {
       .style("text-anchor", "middle")
       .attr("transform", "translate (500,540)")
       .attr("font-size",14)
-      .attr("font-family",'Krona One, sans-serif');
+      .attr("font-family",'Krona One, sans-serif')
+      .style("fill", "#2B2B2B");
 
   /* Add y-axis label */
   ratingSVG.append("text")
@@ -271,7 +272,8 @@ function callback(error, data) {
       .attr("y", "50%")
       .attr("transform", "rotate (270, 0, 230)")
       .attr("font-size",14)
-      .attr("font-family",'Krona One, sans-serif');
+      .attr("font-family",'Krona One, sans-serif')
+      .style("fill", "#2B2B2B");
 
   /* Iterate through and display data */
   ratingData.forEach(function (d, i) {
