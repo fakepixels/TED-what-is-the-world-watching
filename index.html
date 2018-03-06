@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css?family=Karma" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Krona+One" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://d3js.org/topojson.v2.min.js"></script>
@@ -24,7 +25,7 @@
   #ratingSection { margin: -20px; padding: 80px; background-color: #ECECEC;}
   #durationSection { margin: -20px; padding: 80px; background-color: #F3F3F3;}
   #end { margin: -20px; padding: 250px; position: relative;}
-  #ending-bkgd { font-family: 'Krona One', sans-serif; font-size: 110px; opacity: 0.05; position: absolute; top: 15; left: 0; bottom: 30; right: 0; z-index: -20; overflow: hidden;}
+  #ending-bkgd { font-family: 'Krona One', sans-serif; font-size: 120px; opacity: 0.05; position: absolute; top: 15; left: 0; bottom: 30; right: 0; z-index: -20; overflow: hidden;}
 </style>
 </head>
 
@@ -112,19 +113,19 @@ function callback(error, data) {
       .text(NUM_MAX + " talks")
       .style("text-anchor", "left")
       .style("alignment-baseline", "middle")
-      .style("fill", "#2B2B2B")
+      .style("fill", "#FFCE06")
       .style("opacity", 1)
-      .attr("transform", "translate (" + (x_pos+400) + "," + (y_pos-75) + ")")
-      .attr("font-size",14)
-      .attr("font-family",'Krona One, sans-serif');
+      .attr("transform", "translate (" + (x_pos+385) + "," + (y_pos-75) + ")")
+      .attr("font-size",22)
+      .attr("font-family",'Permanent Marker, cursive');
 
       tagSVG.append("line")
       .attr("x1", x_pos+240)
       .attr("y1", y_pos-25)
-      .attr("x2", x_pos+400)
+      .attr("x2", x_pos+380)
       .attr("y2", y_pos-75)
-      .style("stroke", "#2B2B2B")
-      .style("stroke-width", 2)
+      .style("stroke", "#FFCE06")
+      .style("stroke-width", 1.5)
       .style("opacity", 1);
     }
 
@@ -134,19 +135,19 @@ function callback(error, data) {
       .text(NUM_MIN + " talks")
       .style("text-anchor", "right")
       .style("alignment-baseline", "middle")
-      .style("fill", "#2B2B2B")
+      .style("fill", "#FFCE06")
       .style("opacity", 1)
-      .attr("transform", "translate (" + (x_pos-200) + "," + (y_pos+25) + ")")
-      .attr("font-size",14)
-      .attr("font-family",'Krona One, sans-serif');
+      .attr("transform", "translate (" + (x_pos-220) + "," + (y_pos+25) + ")")
+      .attr("font-size",22)
+      .attr("font-family",'Permanent Marker, cursive');
 
       tagSVG.append("line")
       .attr("x1", x_pos-50)
       .attr("y1", y_pos-5)
       .attr("x2", x_pos-115)
       .attr("y2", y_pos+25)
-      .style("stroke", "#2B2B2B")
-      .style("stroke-width", 2)
+      .style("stroke", "#FFCE06")
+      .style("stroke-width", 1.5)
       .style("opacity", 1);
     }
     
@@ -156,19 +157,19 @@ function callback(error, data) {
       .text(501 + " talks")
       .style("text-anchor", "right")
       .style("alignment-baseline", "middle")
-      .style("fill", "#2B2B2B")
+      .style("fill", "#FFCE06")
       .style("opacity", 1)
-      .attr("transform", "translate (" + (x_pos+375) + "," + (y_pos-15) + ")")
-      .attr("font-size",14)
-      .attr("font-family",'Krona One, sans-serif');
+      .attr("transform", "translate (" + (x_pos+360) + "," + (y_pos-15) + ")")
+      .attr("font-size",22)
+      .attr("font-family",'Permanent Marker, cursive');
 
       tagSVG.append("line")
       .attr("x1", x_pos+200)
       .attr("y1", y_pos-17)
-      .attr("x2", x_pos+373)
+      .attr("x2", x_pos+355)
       .attr("y2", y_pos-17)
-      .style("stroke", "#2B2B2B")
-      .style("stroke-width", 2)
+      .style("stroke", "#FFCE06")
+      .style("stroke-width", 1.5)
       .style("opacity", 1);
     }
     
